@@ -1,0 +1,18 @@
+/* Main Styles */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+.float-animation { 
+    animation: float 3s ease-in-out infinite; 
+}
+
+.hero-bg {
+    background-image: url('https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=1600');
+    background-size: cover;
+    background-position: center;
+}
+
+/* Add any additional styles here */
+/* You can organize your styles by components or sections for better maintainability */

@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users - Karnya Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            width: 250px;
+        }
+        .main-content {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="sidebar bg-white shadow-md fixed">
+            <div class="p-4 border-b">
+                <h1 class="text-xl font-bold text-gray-800">Karnya Admin</h1>
+            </div>
+            <nav class="mt-6">
+                <a href="dashboard.html" class="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
+                    <i class="fas fa-tachometer-alt w-6"></i>
+                    <span class="mx-3">Dashboard</span>
+                </a>
+                <a href="users.html" class="flex items-center px-6 py-3 text-blue-600 bg-blue-50">
+                    <i class="fas fa-users w-6"></i>
+                    <span class="mx-3">Users</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
+                    <i class="fas fa-trash-alt w-6"></i>
+                    <span class="mx-3">Waste Management</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
+                    <i class="fas fa-chart-bar w-6"></i>
+                    <span class="mx-3">Analytics</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
+                    <i class="fas fa-cog w-6"></i>
+                    <span class="mx-3">Settings</span>
+                </a>
+            </nav>
+            <div class="absolute bottom-0 w-full p-4 border-t">
+                <button id="logoutBtn" class="w-full flex items-center px-4 py-2 text-red-600 hover:bg-red-50 rounded-md">
+                    <i class="fas fa-sign-out-alt w-6"></i>
+                    <span class="mx-3">Logout</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Navigation -->
+            <header class="bg-white shadow-sm">
+                <div class="flex justify-between items-center px-6 py-4">
+                    <h2 class="text-xl font-semibold text-gray-800">User Management</h2>
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <i class="fas fa-bell text-gray-500 text-xl cursor-pointer"></i>
+                            <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">3</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <img src="https://ui-avatars.com/api/?name=Admin&background=3B82F6&color=fff" alt="Admin" class="w-8 h-8 rounded-full">
+                            <span class="text-gray-700">Admin</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Users Content -->
+            <main class="p-6">
+                <!-- Search and Filter Bar -->
+                <div class="bg-white p-4 rounded-lg shadow mb-6">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+                        <div class="relative flex-1 max-w-md">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                            <input type="text" id="searchInput" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Search users...">
+                        </div>
+                        <div class="flex space-x-3">
+                            <select id="filterRole" class="block w-40 pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                <option value="">All Roles</option>
+                                <option value="admin">Admin</option>
+                                <option value="user">User</option>
+                                <option value="collector">Waste Collector</option>
+                            </select>
+                            <select id="filterStatus" class="block w-40 pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                <option value="">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="suspended">Suspended</option>
+                            </select>
+                            <button id="addUserBtn" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                <i class="fas fa-plus mr-2"></i> Add User
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Table -->
+                <div class="bg-white shadow overflow-hidden rounded-lg">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <div class="flex items-center">
+                                            <span>User</span>
+                                            <button class="ml-2 text-gray-400 hover:text-gray-600">
+                                                <i class="fas fa-sort"></i>
+                                            </button>
+                                        </div>
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <div class="flex items-center">
+                                            <span>Contact</span>
+                                            <button class="ml-2 text-gray-400 hover:text-gray-600">
+                                                <i class="fas fa-sort"></i>
+                                            </button>
+                                        </div>
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <div class="flex items-center">
+                                            <span>Role</span>
+                                            <button class="ml-2 text-gray-400 hover:text-gray-600">
+                                                <i class="fas fa-sort"></i>
+                                            </button>
+                                        </div>
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <div class="flex items-center">
+                                            <span>Status</span>
+                                            <button class="ml-2 text-gray-400 hover:text-gray-600">
+                                                <i class="fas fa-sort"></i>
+                                            </button>
+                                        </div>
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <div class="flex items-center">
+                                            <span>Joined</span>
+                                            <button class="ml-2 text-gray-400 hover:text-gray-600">
+                                                <i class="fas fa-sort"></i>
+                                            </button>
+                                        </div>
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200" id="usersTableBody">
+                                <!-- Users will be loaded here -->
+                                <tr>
+                                    <td colspan="6" class="px-6 py-4 text-center">
+                                        <div class="animate-pulse flex justify-center">
+                                            <div class="h-4 w-4 bg-blue-400 rounded-full mr-2"></div>
+                                            <div class="h-4 w-4 bg-blue-400 rounded-full mr-2"></div>
+                                            <div class="h-4 w-4 bg-blue-400 rounded-full"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Pagination -->
+                    <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                        <div class="flex-1 flex justify-between sm:hidden">
+                            <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                Previous
+                            </a>
+                            <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                Next
+                            </a>
+                        </div>
+                        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                            <div>
+                                <p class="text-sm text-gray-700">
+                                    Showing <span class="font-medium" id="startItem">1</span> to <span class="font-medium" id="endItem">10</span> of <span class="font-medium" id="totalItems">0</span> results
+                                </p>
+                            </div>
+                            <div>
+                                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                    <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50" id="prevPage">
+                                        <span class="sr-only">Previous</span>
+                                        <i class="fas fa-chevron-left h-5 w-5"></i>
+                                    </a>
+                                    <div id="paginationNumbers" class="flex">
+                                        <!-- Page numbers will be added here -->
+                                    </div>
+                                    <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50" id="nextPage">
+                                        <span class="sr-only">Next</span>
+                                        <i class="fas fa-chevron-right h-5 w-5"></i>
+                                    </a>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add/Edit User Modal -->
+    <div id="userModal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <i class="fas fa-user-plus text-blue-600"></i>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modalTitle">Add New User</h3>
+                            <div class="mt-2">
+                                <form id="userForm" class="space-y-4">
+                                    <input type="hidden" id="userId">
+                                    <div>
+                                        <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                                        <input type="text" id="name" name="name" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    </div>
+                                    <div>
+                                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                                        <input type="email" id="email" name="email" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    </div>
+                                    <div id="passwordField">
+                                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                                        <input type="password" id="password" name="password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                        <p class="mt-1 text-xs text-gray-500">Leave blank to keep current password</p>
+                                    </div>
+                                    <div>
+                                        <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                                        <input type="tel" id="phone" name="phone" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    </div>
+                                    <div>
+                                        <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
+                                        <select id="role" name="role" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                            <option value="user">User</option>
+                                            <option value="admin">Admin</option>
+                                            <option value="collector">Waste Collector</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                                        <select id="status" name="status" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                            <option value="active">Active</option>
+                                            <option value="inactive">Inactive</option>
+                                            <option value="suspended">Suspended</option>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" id="saveUserBtn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Save
+                    </button>
+                    <button type="button" id="cancelModalBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <i class="fas fa-exclamation text-red-600"></i>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="deleteModalTitle">Delete User</h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500">Are you sure you want to delete this user? This action cannot be undone.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" id="confirmDeleteBtn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Delete
+                    </button>
+                    <button type="button" id="cancelDeleteBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if admin is logged in
+        const token = localStorage.getItem('adminToken');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            localStorage.removeItem('adminToken');
+            window.location.href = 'login.html';
+        });
+
+        // Modal elements
+        const userModal = document.getElementById('userModal');
+        const deleteModal = document.getElementById('deleteModal');
+        const addUserBtn = document.getElementById('addUserBtn');
+        const cancelModalBtn = document.getElementById('cancelModalBtn');
+        const saveUserBtn = document.getElementById('saveUserBtn');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const userForm = document.getElementById('userForm');
+        
+        // Search and filter elements
+        const searchInput = document.getElementById('searchInput');
+        const filterRole = document.getElementById('filterRole');
+        const filterStatus = document.getElementById('filterStatus');
+        
+        // Pagination elements
+        const prevPageBtn = document.getElementById('prevPage');
+        const nextPageBtn = document.getElementById('nextPage');
+        const paginationNumbers = document.getElementById('paginationNumbers');
+        const startItemSpan = document.getElementById('startItem');
+        const endItemSpan = document.getElementById('endItem');
+        const totalItemsSpan = document.getElementById('totalItems');
+        
+        // State
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let totalUsers = 0;
+        let users = [];
+        let userIdToDelete = null;
+
+        // Event Listeners
+        addUserBtn.addEventListener('click', () => openUserModal());
+        cancelModalBtn.addEventListener('click', () => closeModal(userModal));
+        cancelDeleteBtn.addEventListener('click', () => closeModal(deleteModal));
+        saveUserBtn.addEventListener('click', saveUser);
+        confirmDeleteBtn.addEventListener('click', confirmDelete);
+        
+        // Search and filter event listeners
+        searchInput.addEventListener('input', debounce(fetchUsers, 300));
+        filterRole.addEventListener('change', fetchUsers);
+        filterStatus.addEventListener('change', fetchUsers);
+        
+        // Pagination event listeners
+        prevPageBtn.addEventListener('click', goToPreviousPage);
+        nextPageBtn.addEventListener('click', goToNextPage);
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchUsers();
+        });
+
+        // Functions
+        async function fetchUsers() {
+            try {
+                const search = searchInput.value;
+                const role = filterRole.value;
+                const status = filterStatus.value;
+                
+                // In a real app, you would fetch users from your API with pagination, search, and filters
+                // For now, we'll use mock data
+                const response = await fetch(`/api/admin/users?page=${currentPage}&limit=${itemsPerPage}&search=${search}&role=${role}&status=${status}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        // Unauthorized - redirect to login
+                        localStorage.removeItem('adminToken');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    throw new Error('Failed to fetch users');
+                }
+
+                const data = await response.json();
+                users = data.users || [];
+                totalUsers = data.total || 0;
+                
+                renderUsers();
+                updatePagination();
+                
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                showError('Failed to load users. Please try again.');
+            }
+        }
+
+        function renderUsers() {
+            const tbody = document.getElementById('usersTableBody');
+            
+            if (users.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                            No users found
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-10 w-10">
+                                <img class="h-10 w-10 rounded-full" src="https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=3B82F6&color=fff" alt="">
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">${user.name}</div>
+                                <div class="text-sm text-gray-500">@${user.username || user.name.toLowerCase().replace(/\s+/g, '')}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">${user.email}</div>
+                        <div class="text-sm text-gray-500">${user.phone || 'N/A'}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                            ${user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 
+                              user.role === 'collector' ? 'bg-yellow-100 text-yellow-800' : 
+                              'bg-blue-100 text-blue-800'}">
+                            ${user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                            ${user.status === 'active' ? 'bg-green-100 text-green-800' : 
+                              user.status === 'suspended' ? 'bg-red-100 text-red-800' : 
+                              'bg-gray-100 text-gray-800'}">
+                            ${user.status.charAt(0).toUpperCase() + user.status.slice(1)}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${new Date(user.createdAt).toLocaleDateString()}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button onclick="editUser('${user._id}')" class="text-indigo-600 hover:text-indigo-900 mr-3">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="confirmDeleteUser('${user._id}')" class="text-red-600 hover:text-red-900">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updatePagination() {
+            const totalPages = Math.ceil(totalUsers / itemsPerPage);
+            
+            // Update pagination info
+            startItemSpan.textContent = totalUsers === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
+            endItemSpan.textContent = Math.min(currentPage * itemsPerPage, totalUsers);
+            totalItemsSpan.textContent = totalUsers;
+            
+            // Update pagination buttons
+            prevPageBtn.disabled = currentPage === 1;
+            nextPageBtn.disabled = currentPage >= totalPages;
+            
+            // Update page numbers
+            paginationNumbers.innerHTML = '';
+            
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            
+            if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+            
+            // Previous page button
+            if (startPage > 1) {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <button class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50" data-page="1">
+                        1
+                    </button>
+                `;
+                if (startPage > 2) {
+                    const ellipsis = document.createElement('li');
+                    ellipsis.innerHTML = '<span class="px-4 py-2">...</span>';
+                    paginationNumbers.appendChild(ellipsis);
+                }
+            }
+            
+            // Page numbers
+            for (let i = startPage; i <= endPage; i++) {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <button class="relative inline-flex items-center px-4 py-2 border ${i === currentPage ? 'border-blue-500 bg-blue-50 text-blue-600' : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'} text-sm font-medium" data-page="${i}">
+                        ${i}
+                    </button>
+                `;
+                paginationNumbers.appendChild(li);
+            }
+            
+            // Next page button
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const ellipsis = document.createElement('li');
+                    ellipsis.innerHTML = '<span class="px-4 py-2">...</span>';
+                    paginationNumbers.appendChild(ellipsis);
+                }
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <button class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50" data-page="${totalPages}">
+                        ${totalPages}
+                    </button>
+                `;
+                paginationNumbers.appendChild(li);
+            }
+            
+            // Add click event to page number buttons
+            document.querySelectorAll('#paginationNumbers button[data-page]').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    currentPage = parseInt(e.target.getAttribute('data-page'));
+                    fetchUsers();
+                });
+            });
+        }
+
+        function goToPreviousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                fetchUsers();
+            }
+        }
+
+        function goToNextPage() {
+            const totalPages = Math.ceil(totalUsers / itemsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                fetchUsers();
+            }
+        }
+
+        function openUserModal(user = null) {
+            const modalTitle = document.getElementById('modalTitle');
+            const passwordField = document.getElementById('passwordField');
+            
+            if (user) {
+                // Edit mode
+                modalTitle.textContent = 'Edit User';
+                document.getElementById('userId').value = user._id;
+                document.getElementById('name').value = user.name;
+                document.getElementById('email').value = user.email;
+                document.getElementById('phone').value = user.phone || '';
+                document.getElementById('role').value = user.role || 'user';
+                document.getElementById('status').value = user.status || 'active';
+                
+                // Hide password field for existing users (optional)
+                passwordField.style.display = 'none';
+            } else {
+                // Add new user mode
+                modalTitle.textContent = 'Add New User';
+                userForm.reset();
+                document.getElementById('userId').value = '';
+                
+                // Show password field for new users
+                passwordField.style.display = 'block';
+                document.getElementById('password').required = true;
+            }
+            
+            openModal(userModal);
+        }
+
+        async function saveUser() {
+            try {
+                const userId = document.getElementById('userId').value;
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    role: document.getElementById('role').value,
+                    status: document.getElementById('status').value
+                };
+                
+                // Only include password if it's a new user or being changed
+                const password = document.getElementById('password').value;
+                if (password) {
+                    formData.password = password;
+                }
+                
+                let response;
+                const url = userId ? `/api/admin/users/${userId}` : '/api/admin/users';
+                const method = userId ? 'PUT' : 'POST';
+                
+                response = await fetch(url, {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to save user');
+                }
+                
+                closeModal(userModal);
+                showSuccess(userId ? 'User updated successfully' : 'User created successfully');
+                fetchUsers();
+                
+            } catch (error) {
+                console.error('Error saving user:', error);
+                showError(error.message || 'Failed to save user');
+            }
+        }
+
+        // Make these functions globally available for inline event handlers
+        window.editUser = async function(userId) {
+            try {
+                // In a real app, you would fetch the user details from your API
+                // For now, we'll find the user in our local array
+                const user = users.find(u => u._id === userId);
+                if (user) {
+                    openUserModal(user);
+                }
+            } catch (error) {
+                console.error('Error fetching user:', error);
+                showError('Failed to load user details');
+            }
+        };
+
+        window.confirmDeleteUser = function(userId) {
+            userIdToDelete = userId;
+            openModal(deleteModal);
+        };
+
+        async function confirmDelete() {
+            if (!userIdToDelete) return;
+            
+            try {
+                const response = await fetch(`/api/admin/users/${userIdToDelete}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to delete user');
+                }
+                
+                closeModal(deleteModal);
+                showSuccess('User deleted successfully');
+                fetchUsers();
+                
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                showError(error.message || 'Failed to delete user');
+            } finally {
+                userIdToDelete = null;
+            }
+        }
+
+        // Helper functions
+        function openModal(modal) {
+            modal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function closeModal(modal) {
+            modal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        function showError(message) {
+            // In a real app, you would show a nice toast notification
+            alert(`Error: ${message}`);
+        }
+
+        function showSuccess(message) {
+            // In a real app, you would show a nice success notification
+            alert(`Success: ${message}`);
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email - Karnya</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f8fafc;
+        }
+        .verification-container {
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 2.5rem;
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .verification-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background-color: #ecfdf5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="bg-green-500 p-2 rounded-full">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                        </svg>
+                    </div>
+                    <h1 class="text-3xl font-bold text-green-600">Karnya</h1>
+                </div>
+                <div class="flex gap-4">
+                    <a href="../../index.html" class="text-gray-700 hover:text-green-600 px-4 py-2 rounded-lg transition font-medium">Home</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Verification Content -->
+    <div class="verification-container">
+        <div class="verification-icon">
+            <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Verify Your Email</h2>
+        <p class="text-gray-600 mb-6">We've sent a verification link to <span id="userEmail" class="font-medium">your.email@example.com</span></p>
+        
+        <p class="text-gray-600 mb-6">Please check your email and click on the verification link to activate your account.</p>
+        
+        <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6 text-left">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-blue-700">
+                        Didn't receive the email? Check your spam folder or <a href="#" id="resendLink" class="font-medium text-blue-700 hover:text-blue-600">click here to resend</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <a href="../../index.html" class="inline-block bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 transition font-semibold">
+            Back to Home
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get email from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const email = urlParams.get('email');
+            
+            if (email) {
+                document.getElementById('userEmail').textContent = email;
+            }
+            
+            // Handle resend email
+            document.getElementById('resendLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                // In a real app, you would make an API call to resend the verification email
+                alert('Verification email resent! Please check your inbox.');
+            });
+            
+            // Check if this is a verification link (in a real app, this would be handled by your backend)
+            const code = urlParams.get('code');
+            if (code) {
+                // In a real app, you would verify the code with your backend
+                // For demo purposes, we'll just show a success message
+                const verificationContainer = document.querySelector('.verification-container');
+                verificationContainer.innerHTML = `
+                    <div class="text-center">
+                        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                            <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h2 class="mt-3 text-2xl font-bold text-gray-800">Email Verified!</h2>
+                        <p class="mt-2 text-gray-600">Your email has been successfully verified.</p>
+                        <div class="mt-6">
+                            <a href="../../pages/login.html" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                Continue to Login
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

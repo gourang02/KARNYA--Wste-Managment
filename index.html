@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Karnya</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-messaging-compat.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen">
+        <!-- Sidebar -->
+        <div class="bg-gray-800 text-white w-64 fixed h-full">
+            <div class="p-4 border-b border-gray-700">
+                <h1 class="text-2xl font-bold">Karnya Admin</h1>
+            </div>
+            <nav class="mt-4">
+                <a href="#" class="block py-3 px-4 bg-gray-700">
+                    <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+                </a>
+                <a href="#users" class="block py-3 px-4 hover:bg-gray-700">
+                    <i class="fas fa-users mr-2"></i> Users
+                </a>
+                <a href="#notifications" class="block py-3 px-4 hover:bg-gray-700">
+                    <i class="fas fa-bell mr-2"></i> Notifications
+                    <span id="notificationBadge" class="bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2 inline-block">0</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="ml-64 p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Admin Dashboard</h2>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button id="notificationBtn" class="text-gray-600 hover:text-gray-900">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span id="notificationCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                        </button>
+                        <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg z-10">
+                            <div class="p-3 border-b border-gray-200">
+                                <h3 class="font-semibold">Notifications</h3>
+                            </div>
+                            <div id="notificationList" class="max-h-96 overflow-y-auto">
+                                <!-- Notifications will be added here dynamically -->
+                                <div class="p-4 text-center text-gray-500">No new notifications</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                            <i class="fas fa-users text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-gray-500">Total Users</p>
+                            <h3 class="text-2xl font-bold" id="totalUsers">0</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-green-100 text-green-600">
+                            <i class="fas fa-utensils text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-gray-500">Total Donations</p>
+                            <h3 class="text-2xl font-bold" id="totalDonations">0</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                            <i class="fas fa-recycle text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-gray-500">Waste Processed</p>
+                            <h3 class="text-2xl font-bold" id="wasteProcessed">0 kg</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Users -->
+            <div class="bg-white rounded-lg shadow p-6 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold">Recent Users</h3>
+                    <a href="#" class="text-blue-600 hover:underline">View All</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentUsersList" class="divide-y divide-gray-200">
+                            <!-- Recent users will be added here dynamically -->
+                            <tr>
+                                <td colspan="4" class="px-6 py-4 text-center text-gray-500">Loading users...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Sound -->
+    <audio id="notificationSound" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2862/2862-preview.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Firebase configuration - Replace with your Firebase config
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const messaging = firebase.messaging();
+
+        // Request permission for notifications
+        function requestNotificationPermission() {
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    console.log('Notification permission granted.');
+                    // Get FCM token
+                    messaging.getToken({vapidKey: 'YOUR_VAPID_KEY'}).then((currentToken) => {
+                        if (currentToken) {
+                            // Send the token to your server for sending notifications
+                            console.log('FCM Token:', currentToken);
+                        } else {
+                            console.log('No registration token available.');
+                        }
+                    }).catch((err) => {
+                        console.log('An error occurred while retrieving token. ', err);
+                    });
+                } else {
+                    console.log('Unable to get permission to notify.');
+                }
+            });
+        }
+
+        // Listen for new user registrations
+        function setupUserListener() {
+            const usersRef = database.ref('users').orderByChild('createdAt').limitToLast(10);
+            
+            usersRef.on('child_added', (snapshot) => {
+                const user = snapshot.val();
+                addNewUserNotification(user);
+                updateUserCount();
+            });
+
+            // Initial user count
+            updateUserCount();
+        }
+
+        // Add new user notification
+        function addNewUserNotification(user) {
+            const notificationList = document.getElementById('notificationList');
+            const noNotifications = notificationList.querySelector('.text-center');
+            
+            if (noNotifications) {
+                notificationList.innerHTML = '';
+            }
+
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            
+            const notification = document.createElement('div');
+            notification.className = 'p-4 border-b border-gray-100 hover:bg-gray-50';
+            notification.innerHTML = `
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-gray-900">New User Registered</p>
+                        <p class="text-sm text-gray-500">${user.name || 'New user'} just signed up</p>
+                        <p class="text-xs text-gray-400 mt-1">${timeString}</p>
+                    </div>
+                </div>
+            `;
+            
+            notificationList.insertBefore(notification, notificationList.firstChild);
+            
+            // Update notification count
+            updateNotificationCount(1);
+            
+            // Play notification sound
+            const sound = document.getElementById('notificationSound');
+            sound.play().catch(e => console.log('Error playing sound:', e));
+            
+            // Show browser notification if allowed
+            if (Notification.permission === 'granted') {
+                new Notification('New User Registered', {
+                    body: `${user.name || 'A new user'} just signed up!`,
+                    icon: 'https://your-website.com/logo.png'
+                });
+            }
+        }
+
+        // Update notification count
+        function updateNotificationCount(change = 0) {
+            const countElement = document.getElementById('notificationCount');
+            const badgeElement = document.getElementById('notificationBadge');
+            
+            let count = parseInt(countElement.textContent) + change;
+            count = Math.max(0, count); // Ensure count doesn't go below 0
+            
+            countElement.textContent = count;
+            badgeElement.textContent = count;
+            
+            // Toggle badge visibility
+            if (count > 0) {
+                countElement.classList.remove('hidden');
+                badgeElement.classList.remove('hidden');
+            } else {
+                countElement.classList.add('hidden');
+                badgeElement.classList.add('hidden');
+            }
+        }
+
+        // Update user count
+        function updateUserCount() {
+            const usersRef = database.ref('users');
+            usersRef.once('value').then((snapshot) => {
+                const count = snapshot.numChildren();
+                document.getElementById('totalUsers').textContent = count;
+                
+                // Update recent users list
+                updateRecentUsers(snapshot);
+            });
+        }
+
+        // Update recent users list
+        function updateRecentUsers(snapshot) {
+            const usersList = document.getElementById('recentUsersList');
+            usersList.innerHTML = '';
+            
+            const users = [];
+            snapshot.forEach((childSnapshot) => {
+                users.push({
+                    id: childSnapshot.key,
+                    ...childSnapshot.val()
+                });
+            });
+            
+            // Sort by creation date (newest first)
+            users.sort((a, b) => b.createdAt - a.createdAt);
+            
+            // Show only the 5 most recent users
+            const recentUsers = users.slice(0, 5);
+            
+            if (recentUsers.length === 0) {
+                usersList.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="px-6 py-4 text-center text-gray-500">No users found</td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            recentUsers.forEach((user) => {
+                const row = document.createElement('tr');
+                const date = new Date(user.createdAt);
+                const formattedDate = date.toLocaleDateString();
+                
+                row.className = 'hover:bg-gray-50';
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">${user.name || 'User'}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">${user.email || 'N/A'}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            ${user.role || 'user'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${formattedDate}
+                    </td>
+                `;
+                
+                usersList.appendChild(row);
+            });
+        }
+
+        // Toggle notification dropdown
+        document.getElementById('notificationBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.getElementById('notificationDropdown').classList.toggle('hidden');
+            
+            // Reset notification count when dropdown is opened
+            if (!document.getElementById('notificationDropdown').classList.contains('hidden')) {
+                updateNotificationCount(-parseInt(document.getElementById('notificationCount').textContent));
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('notificationDropdown');
+            const button = document.getElementById('notificationBtn');
+            
+            if (!dropdown.contains(e.target) && !button.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', () => {
+            // Request notification permission
+            requestNotificationPermission();
+            
+            // Set up user listener
+            setupUserListener();
+            
+            // Simulate some initial data (remove in production)
+            setTimeout(() => {
+                updateUserCount();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

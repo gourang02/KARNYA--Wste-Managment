@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Karnya</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="../../index.html" class="flex items-center gap-3">
+                    <div class="bg-green-500 p-2 rounded-full">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                        </svg>
+                    </div>
+                    <h1 class="text-2xl font-bold text-green-600">Karnya</h1>
+                </a>
+                <a href="../../index.html" class="text-gray-700 hover:text-green-600 font-medium transition">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to Home
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Feature Hero -->
+    <section class="pt-32 pb-20 px-6">
+        <div class="container mx-auto">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="bg-green-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                </div>
+                <h1 class="text-5xl font-bold text-gray-800 mb-6">Admin Dashboard</h1>
+                <p class="text-xl text-gray-600 mb-12">Comprehensive control and analytics for your waste management system</p>
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200" alt="Admin Dashboard" class="rounded-xl shadow-2xl w-full max-w-4xl mx-auto">
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Details -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="max-w-6xl mx-auto">
+                <!-- Stats Overview -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                    <div class="bg-blue-50 p-6 rounded-xl">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500">Total Waste Managed</p>
+                                <h3 class="text-3xl font-bold text-gray-800">1,240 kg</h3>
+                                <p class="text-sm text-green-600 flex items-center mt-1">
+                                    <span class="font-medium">+12.5%</span>
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+                                    </svg>
+                                </p>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-green-50 p-6 rounded-xl">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500">Active Partners</p>
+                                <h3 class="text-3xl font-bold text-gray-800">48</h3>
+                                <p class="text-sm text-green-600 flex items-center mt-1">
+                                    <span class="font-medium">+5.2%</span>
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+                                    </svg>
+                                </p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-lg">
+                                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 p-6 rounded-xl">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500">Active Collections</p>
+                                <h3 class="text-3xl font-bold text-gray-800">23</h3>
+                                <p class="text-sm text-red-600 flex items-center mt-1">
+                                    <span class="font-medium">-2.1%</span>
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </p>
+                            </div>
+                            <div class="bg-yellow-100 p-3 rounded-lg">
+                                <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-purple-50 p-6 rounded-xl">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500">Meals Donated</p>
+                                <h3 class="text-3xl font-bold text-gray-800">1,850</h3>
+                                <p class="text-sm text-green-600 flex items-center mt-1">
+                                    <span class="font-medium">+8.7%</span>
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+                                    </svg>
+                                </p>
+                            </div>
+                            <div class="bg-purple-100 p-3 rounded-lg">
+                                <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-white p-6 rounded-xl shadow">
+                        <h3 class="text-xl font-semibold mb-4">Waste Collection Trend</h3>
+                        <canvas id="wasteChart" class="w-full h-64"></canvas>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow">
+                        <h3 class="text-xl font-semibold mb-4">Waste Distribution</h3>
+                        <canvas id="distributionChart" class="w-full h-64"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="bg-white rounded-xl shadow overflow-hidden">
+                    <div class="p-6 border-b border-gray-200">
+                        <h3 class="text-xl font-semibold">Recent Activities</h3>
+                    </div>
+                    <div class="divide-y divide-gray-200">
+                        <div class="p-4 hover:bg-gray-50 transition">
+                            <div class="flex items-center">
+                                <div class="bg-green-100 p-2 rounded-lg mr-4">
+                                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium">New collection scheduled</p>
+                                    <p class="text-sm text-gray-500">Taj Hotel, Mumbai - 30 mins ago</p>
+                                </div>
+                                <span class="text-sm text-gray-500">Just now</span>
+                            </div>
+                        </div>
+                        <div class="p-4 hover:bg-gray-50 transition">
+                            <div class="flex items-center">
+                                <div class="bg-blue-100 p-2 rounded-lg mr-4">
+                                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium">New partner onboarded</p>
+                                    <p class="text-sm text-gray-500">Green Earth NGO - 2 hours ago</p>
+                                </div>
+                                <span class="text-sm text-gray-500">2h ago</span>
+                            </div>
+                        </div>
+                        <div class="p-4 hover:bg-gray-50 transition">
+                            <div class="flex items-center">
+                                <div class="bg-yellow-100 p-2 rounded-lg mr-4">
+                                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium">Collection delayed</p>
+                                    <p class="text-sm text-gray-500">ITC Grand Central - 5 hours ago</p>
+                                </div>
+                                <span class="text-sm text-gray-500">5h ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-green-600 to-green-700 text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-6">Take Control of Your Waste Management</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">Get access to powerful analytics and management tools with Karnya's Admin Dashboard.</p>
+            <a href="../../pages/register.html" class="bg-white text-green-700 px-8 py-4 rounded-lg hover:bg-gray-100 transition font-bold text-lg shadow-xl inline-block">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center gap-2">
+                        <div class="bg-green-500 p-2 rounded-full">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                            </svg>
+                        </div>
+                        <span class="text-xl font-bold">Karnya</span>
+                    </div>
+                    <p class="text-gray-400 mt-2">Smart Solutions for a Better Tomorrow</p>
+                </div>
+                <div class="text-gray-400 text-sm">
+                    <p>© 2023 Karnya. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Waste Trend Chart
+        const wasteCtx = document.getElementById('wasteChart').getContext('2d');
+        new Chart(wasteCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Waste Collected (kg)',
+                    data: [120, 190, 170, 210, 240, 280],
+                    borderColor: 'rgb(59, 130, 246)',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Distribution Chart
+        const distCtx = document.getElementById('distributionChart').getContext('2d');
+        new Chart(distCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Veg Waste', 'Non-Veg Waste', 'Mixed Waste', 'Other'],
+                datasets: [{
+                    data: [45, 30, 15, 10],
+                    backgroundColor: [
+                        'rgb(34, 197, 94)',
+                        'rgb(249, 115, 22)',
+                        'rgb(59, 130, 246)',
+                        'rgb(168, 85, 247)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+    <script src="../../js/main.js"></script>
+</body>
+</html>

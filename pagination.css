@@ -1,0 +1,58 @@
+/* Pagination Styles */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.pagination-btn {
+    padding: 0.5rem 1rem;
+    margin: 0 0.25rem;
+    border: 1px solid #ddd;
+    background-color: #f8f9fa;
+    color: #007bff;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.pagination-btn:hover {
+    background-color: #e9ecef;
+    color: #0056b3;
+    border-color: #dee2e6;
+}
+
+.pagination-btn.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .pagination {
+        gap: 0.25rem;
+    }
+    
+    .pagination-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Hide all features by default, they'll be shown by the pagination script */
+.feature-item {
+    display: none;
+}
+
+/* Show the first feature by default (for non-JS users) */
+.feature-item:first-child {
+    display: block;
+}
